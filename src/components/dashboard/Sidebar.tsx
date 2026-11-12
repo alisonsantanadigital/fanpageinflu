@@ -16,6 +16,8 @@ import {
   ChevronDown,
   Sparkles,
   CheckCircle2,
+  RotateCcw,
+  Video
 } from 'lucide-react';
 
 export type DashboardTab =
@@ -38,7 +40,9 @@ interface SidebarProps {
   onSelectAccount: (username: string) => void;
   onNewCreator: () => void;
   onOpenVisualEditor: () => void;
+  onOpenAiCopilot: () => void;
   onViewPublic: () => void;
+  onResetDefault: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -49,37 +53,39 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onSelectAccount,
   onNewCreator,
   onOpenVisualEditor,
+  onOpenAiCopilot,
   onViewPublic,
+  onResetDefault,
 }) => {
   const [isSwitchOpen, setIsSwitchOpen] = React.useState(false);
 
   const navItems: { id: DashboardTab; label: string; icon: React.ReactNode; badge?: string }[] = [
     { id: 'overview', label: 'Visão Geral', icon: <LayoutDashboard className="w-4 h-4" /> },
-    { id: 'my-page', label: 'Minha Página', icon: <Eye className="w-4 h-4" /> },
-    { id: 'appearance', label: 'Aparência', icon: <Palette className="w-4 h-4" />, badge: 'Editor' },
-    { id: 'profile', label: 'Meu Perfil', icon: <User className="w-4 h-4" /> },
-    { id: 'gallery', label: 'Galeria', icon: <Image className="w-4 h-4" /> },
-    { id: 'links', label: 'Meus Links', icon: <Link2 className="w-4 h-4" /> },
-    { id: 'posts', label: 'Publicações', icon: <FileText className="w-4 h-4" /> },
-    { id: 'letter', label: 'Carta aos Fãs', icon: <Mail className="w-4 h-4" /> },
-    { id: 'products', label: 'Produtos', icon: <ShoppingBag className="w-4 h-4" /> },
-    { id: 'settings', label: 'Configurações', icon: <Settings className="w-4 h-4" /> },
+    { id: 'my-page', label: 'Minha Fan Page', icon: <Eye className="w-4 h-4" /> },
+    { id: 'appearance', label: 'Aparência & 10 Modelos', icon: <Palette className="w-4 h-4" />, badge: 'Editor' },
+    { id: 'profile', label: 'Meu Perfil & História', icon: <User className="w-4 h-4" /> },
+    { id: 'gallery', label: 'Galeria & Vídeos', icon: <Image className="w-4 h-4" /> },
+    { id: 'links', label: 'Meus Links Detalhados', icon: <Link2 className="w-4 h-4" /> },
+    { id: 'posts', label: 'Revista & Blog', icon: <FileText className="w-4 h-4" /> },
+    { id: 'letter', label: 'Carta aos Fãs com Lacre', icon: <Mail className="w-4 h-4" /> },
+    { id: 'products', label: 'Livros & Produtos', icon: <ShoppingBag className="w-4 h-4" /> },
+    { id: 'settings', label: 'Configurações & SEO', icon: <Settings className="w-4 h-4" /> },
   ];
 
   return (
-    <aside className="w-64 bg-neutral-900 border-r border-neutral-800 flex flex-col shrink-0 h-screen select-none">
-      {/* Brand & Platform Header */}
+    <aside className="w-64 bg-neutral-900 border-r border-neutral-800 flex flex-col shrink-0 h-screen select-none font-sans">
+      {/* Brand & Panel Header: Named "Meu Espaço" */}
       <div className="h-16 px-5 border-b border-neutral-800 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-600 to-amber-400 flex items-center justify-center text-neutral-950 font-bold text-sm shadow-[0_0_15px_rgba(245,158,11,0.3)]">
-            CW
+            ME
           </div>
           <div>
             <span className="font-semibold text-sm tracking-tight text-white block">
-              Creator World
+              Meu Espaço
             </span>
             <span className="text-[10px] uppercase font-mono text-neutral-400 block tracking-wider">
-              Fan Pages Premium
+              Painel do Criador
             </span>
           </div>
         </div>
@@ -115,7 +121,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {isSwitchOpen && (
           <div className="absolute top-full left-3 right-3 mt-1.5 z-30 bg-neutral-800 border border-neutral-700 rounded-xl shadow-2xl p-1.5 space-y-1">
             <div className="px-2 py-1 text-[10px] font-mono uppercase text-neutral-400 tracking-wider">
-              Alternar Influenciador
+              Alternar Criador
             </div>
             {allAccounts.map((acc) => (
               <button
@@ -151,11 +157,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 className="w-full flex items-center gap-2 p-2 rounded-lg text-xs font-medium text-amber-400 hover:bg-neutral-700/60 transition-colors"
               >
                 <PlusCircle className="w-4 h-4" />
-                <span>+ Criar Nova Fan Page</span>
+                <span>+ Criar Novo Criador</span>
               </button>
             </div>
           </div>
         )}
+      </div>
+
+      {/* AI Copilot Action in Sidebar */}
+      <div className="px-3 pt-3">
+        <button
+          onClick={onOpenAiCopilot}
+          className="w-full flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-amber-500/15 via-amber-400/10 to-transparent border border-amber-500/30 hover:bg-amber-500/20 text-amber-300 text-xs font-semibold transition-all group"
+        >
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
+            <span>Preencher com IA</span>
+          </div>
+          <span className="text-[10px] font-mono uppercase bg-amber-500 text-neutral-950 font-bold px-1.5 py-0.5 rounded">
+            Voz & Prompt
+          </span>
+        </button>
       </div>
 
       {/* Navigation List */}
@@ -189,7 +211,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ))}
       </nav>
 
-      {/* Bottom Actions: View Live Page */}
+      {/* Bottom Actions */}
       <div className="p-3 border-t border-neutral-800 space-y-2">
         <button
           onClick={onViewPublic}
@@ -199,9 +221,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <span>Ver Fan Page Pública</span>
         </button>
 
+        {/* Restore Defaults button */}
+        <button
+          onClick={() => {
+            if (confirm('Deseja restaurar as configurações e dados originais de demonstração?')) {
+              onResetDefault();
+            }
+          }}
+          className="w-full flex items-center justify-center gap-1.5 py-1.5 text-xs text-neutral-500 hover:text-amber-400 transition-colors"
+        >
+          <RotateCcw className="w-3.5 h-3.5" />
+          <span>Restaurar Padrão</span>
+        </button>
+
         <div className="text-center">
           <span className="text-[10px] font-mono text-neutral-500">
-            creatorworld.app/@{activeAccount.profile.username}
+            /@{activeAccount.profile.username}
           </span>
         </div>
       </div>

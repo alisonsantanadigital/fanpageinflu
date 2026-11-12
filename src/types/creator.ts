@@ -146,6 +146,9 @@ export interface CreatorAnalytics {
 
 export interface CreatorAccount {
   id: string;
+  initialTemplateId?: TemplateId;
+  initialUsername?: string;
+  initialDisplayName?: string;
   user: {
     id: string;
     email: string;

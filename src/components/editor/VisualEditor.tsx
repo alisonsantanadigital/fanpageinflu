@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { CreatorAccount, TemplateId } from '../../types/creator';
 import { TemplateRenderer } from '../templates/TemplateRenderer';
+import { INITIAL_DEMO_ACCOUNTS, restoreCreatorAccountToDefault } from '../../services/storageService';
+import { getTemplateDisplayName, resolveOriginalTemplateId } from '../../utils/templateDefaults';
 import { 
   Palette, 
   Type, 
@@ -13,10 +15,10 @@ import {
   Save, 
   Globe, 
   Check, 
-  Undo,
+  RotateCcw,
   ExternalLink,
-  Sparkles,
-  ArrowLeft
+  ArrowLeft,
+  AlertTriangle
 } from 'lucide-react';
 
 interface VisualEditorProps {
@@ -39,6 +41,10 @@ export const VisualEditor: React.FC<VisualEditorProps> = ({
   const [activeTab, setActiveTab] = useState<'templates' | 'identity' | 'colors' | 'fonts' | 'elements'>('templates');
   const [previewDevice, setPreviewDevice] = useState<'mobile' | 'tablet' | 'desktop'>('desktop');
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
+  const [showRestoreConfirm, setShowRestoreConfirm] = useState(false);
+
+  const originalTemplateId = resolveOriginalTemplateId(draft, INITIAL_DEMO_ACCOUNTS);
+  const originalTemplateName = getTemplateDisplayName(originalTemplateId);
 
   const availableTemplates: { id: TemplateId; name: string; tag: string; description: string; available: boolean }[] = [
     {
@@ -144,6 +150,15 @@ export const VisualEditor: React.FC<VisualEditorProps> = ({
     onPublish(updated);
     setSaveStatus('Página publicada com sucesso no endereço permanente!');
     setTimeout(() => setSaveStatus(null), 3000);
+  };
+
+  const handleConfirmRestoreDefault = () => {
+    const restored = restoreCreatorAccountToDefault(draft);
+    setDraft(restored);
+    onSave(restored);
+    setShowRestoreConfirm(false);
+    setSaveStatus('Layout e conteúdo restaurados para o padrão original!');
+    setTimeout(() => setSaveStatus(null), 3500);
   };
 
   return (
@@ -723,6 +738,26 @@ export const VisualEditor: React.FC<VisualEditorProps> = ({
               </div>
             )}
           </div>
+
+          {/* Footer das Configurações de Edição: Restaurar Padrão */}
+          <div className="p-4 border-t border-neutral-800 bg-neutral-900/95 shrink-0 flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <span className="block text-[10px] font-mono uppercase tracking-wider text-neutral-500">
+                Template Original
+              </span>
+              <span className="block text-xs font-medium text-neutral-300 truncate">
+                {originalTemplateName}
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowRestoreConfirm(true)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-neutral-800 hover:bg-neutral-700 text-neutral-200 hover:text-amber-300 border border-neutral-700 transition-colors shrink-0 whitespace-nowrap"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Restaurar Padrão</span>
+            </button>
+          </div>
         </aside>
 
         {/* PAINEL DIREITO: PRÉ-VISUALIZAÇÃO EM TEMPO REAL */}
@@ -749,6 +784,50 @@ export const VisualEditor: React.FC<VisualEditorProps> = ({
           </div>
         </main>
       </div>
+
+      {/* Confirmation Dialog for Restaurar Padrão */}
+      {showRestoreConfirm && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="restore-default-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+        >
+          <div className="bg-neutral-900 border border-neutral-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center shrink-0">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 id="restore-default-title" className="text-base font-semibold text-white">
+                  Restaurar Padrão Original?
+                </h3>
+                <p className="text-xs text-neutral-400 mt-1 leading-relaxed">
+                  Esta ação irá redefinir o layout (modelo, cores, tipografia e estilo) e o conteúdo da página para o padrão do template{' '}
+                  <strong className="text-neutral-200">{originalTemplateName}</strong> escolhido no momento da criação.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-3 border-t border-neutral-800">
+              <button
+                type="button"
+                onClick={() => setShowRestoreConfirm(false)}
+                className="px-4 py-2 rounded-lg text-xs font-medium text-neutral-400 hover:text-white transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmRestoreDefault}
+                className="px-4 py-2 rounded-lg text-xs font-bold bg-amber-500 hover:bg-amber-400 text-neutral-950 transition-colors"
+              >
+                Confirmar Restauração
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

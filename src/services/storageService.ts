@@ -1,4 +1,8 @@
 import { CreatorAccount } from '../types/creator';
+import {
+  buildDefaultAccountSections,
+  restoreAccountToDefault,
+} from '../utils/templateDefaults';
 
 const STORAGE_KEY = 'creator_world_accounts_v1';
 const ACTIVE_CREATOR_KEY = 'creator_world_active_creator_username';
@@ -6,6 +10,9 @@ const ACTIVE_CREATOR_KEY = 'creator_world_active_creator_username';
 export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
   {
     id: 'creator_helena_salles',
+    initialTemplateId: 'editorial-luxury',
+    initialUsername: 'helenavogue',
+    initialDisplayName: 'Helena Salles',
     user: {
       id: 'usr_helena',
       email: 'helena@voguecreators.com',
@@ -248,6 +255,9 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
 
   {
     id: 'creator_lucas_vane',
+    initialTemplateId: 'dark-creator',
+    initialUsername: 'lucasneon',
+    initialDisplayName: 'Lucas Vane',
     user: {
       id: 'usr_lucas',
       email: 'lucas@vaneaudio.io',
@@ -428,6 +438,9 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
 
   {
     id: 'creator_clara_martins',
+    initialTemplateId: 'minimal-personal',
+    initialUsername: 'claramar',
+    initialDisplayName: 'Clara Martins',
     user: {
       id: 'usr_clara',
       email: 'clara@claralifestyle.com',
@@ -662,154 +675,26 @@ export function createNewAccount(
   templateId: CreatorAccount['design']['templateId'] = 'editorial-luxury'
 ): CreatorAccount {
   const cleanSlug = username.replace(/^@+/, '').toLowerCase().trim();
+  const timestamp = Date.now();
+  const defaults = buildDefaultAccountSections(cleanSlug, displayName, email, templateId, undefined, timestamp);
+
   const newAccount: CreatorAccount = {
-    id: `creator_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    id: `creator_${timestamp}_${Math.random().toString(36).substring(2, 7)}`,
+    initialTemplateId: templateId,
+    initialUsername: cleanSlug,
+    initialDisplayName: displayName,
     user: {
-      id: `usr_${Date.now()}`,
+      id: `usr_${timestamp}`,
       email,
       role: 'creator',
     },
-    profile: {
-      id: `prof_${Date.now()}`,
-      username: cleanSlug,
-      displayName,
-      tagline: 'Criador de Conteúdo & Entusiasta Digital',
-      bio: `Bem-vindo(a) ao meu universo pessoal na Creator World.`,
-      fullStory: 'Minha história, trajetória e projetos reunidos em um só lugar.',
-      avatarUrl: '/src/assets/images/hero_helena_editorial_1794505735939.jpg',
-      coverUrl: '/src/assets/images/editorial_art_magazine_1794505737351.jpg',
-      location: 'Brasil',
-      interests: ['Criação Digital', 'Fotografia', 'Projetos Criativos'],
-      trajectory: [
-        { year: '2026', title: 'Estreia na Creator World', description: 'Lançamento oficial da minha fan page e revista pessoal.' },
-      ],
-      instagramUsername: cleanSlug,
-    },
-    design: {
-      templateId,
-      colors: templateId === 'dark-creator'
-        ? {
-            primary: '#8B5CF6',
-            secondary: '#06B6D4',
-            background: '#09090B',
-            text: '#F4F4F5',
-            buttonBg: '#8B5CF6',
-            buttonText: '#FFFFFF',
-            accent: '#EC4899',
-            cardBg: '#18181B',
-          }
-        : templateId === 'minimal-personal'
-        ? {
-            primary: '#3F3F46',
-            secondary: '#71717A',
-            background: '#FAF9F6',
-            text: '#18181B',
-            buttonBg: '#18181B',
-            buttonText: '#FAF9F6',
-            accent: '#A16207',
-            cardBg: '#FFFFFF',
-          }
-        : {
-            primary: '#8F714B',
-            secondary: '#C5A880',
-            background: '#FAF7F2',
-            text: '#1C1917',
-            buttonBg: '#1C1917',
-            buttonText: '#FAF7F2',
-            accent: '#B45309',
-            cardBg: '#FFFFFF',
-          },
-      fonts: {
-        titleFont: templateId === 'dark-creator' ? 'Outfit' : templateId === 'minimal-personal' ? 'Playfair Display' : 'Cormorant Garamond',
-        bodyFont: 'Plus Jakarta Sans',
-        titleSize: 'lg',
-        titleWeight: 'semibold',
-        letterSpacing: 'normal',
-      },
-      visual: {
-        borderRadius: templateId === 'minimal-personal' ? 'lg' : templateId === 'dark-creator' ? 'md' : 'sm',
-        cardStyle: templateId === 'dark-creator' ? 'glass' : templateId === 'minimal-personal' ? 'minimal' : 'bordered',
-        animationStyle: 'smooth',
-        enableGrain: templateId === 'editorial-luxury',
-        enableGlow: templateId === 'dark-creator',
-      },
-    },
-    links: [
-      {
-        id: `link_${Date.now()}_1`,
-        title: 'Meu Perfil no Instagram',
-        url: `https://instagram.com/${cleanSlug}`,
-        description: 'Acompanhe as atualizações e bastidores diários',
-        icon: 'instagram',
-        category: 'redes',
-        isFeatured: true,
-        isActive: true,
-        order: 1,
-        clicksCount: 0,
-      },
-      {
-        id: `link_${Date.now()}_2`,
-        title: 'Contato Profissional & Parcerias',
-        url: `mailto:${email}`,
-        description: 'Entre em contato para propostas comerciais e colaborações',
-        icon: 'mail',
-        category: 'contato',
-        isFeatured: false,
-        isActive: true,
-        order: 2,
-        clicksCount: 0,
-      },
-    ],
-    gallery: [
-      {
-        id: `gal_${Date.now()}_1`,
-        title: 'Momento Especial',
-        type: 'photo',
-        mediaUrl: '/src/assets/images/hero_helena_editorial_1794505735939.jpg',
-        caption: 'Registro fotográfico em alta resolução.',
-        tags: ['Destaque', 'Criador'],
-        category: 'Geral',
-        date: '2026',
-        aspectRatio: '16:9',
-      },
-    ],
-    posts: [
-      {
-        id: `post_${Date.now()}_1`,
-        slug: 'boas-vindas-ao-meu-espaco',
-        title: 'Boas-vindas ao Meu Novo Espaço Pessoal',
-        excerpt: 'Aqui reunirei artigos, novidades, bastidores e cartas exclusivas para você.',
-        content: `É uma alegria imensa inaugurar minha própria fan page na Creator World. Este ambiente foi pensado para aproximar nossa comunidade de forma autêntica e sem filtros.\n\nFique à vontade para explorar os links, ler minhas publicações e me enviar uma mensagem.`,
-        coverImage: '/src/assets/images/editorial_art_magazine_1794505737351.jpg',
-        date: 'Recente',
-        readTime: '2 min de leitura',
-        category: 'Novidades',
-        published: true,
-      },
-    ],
-    letter: {
-      id: `letter_${Date.now()}`,
-      title: 'Uma Carta para Você',
-      teaser: 'Toque para abrir e ler a mensagem pessoal que escrevi.',
-      text: `Olá!\n\nMuito obrigado por visitar meu site. Este projeto é a realização de um grande sonho: ter um cantinho digital autônomo e especial para compartilhar o que amo com as pessoas mais incríveis da internet.\n\nUm forte abraço!`,
-      signature: displayName,
-      date: '2026',
-      waxSealColor: '#8F714B',
-      envelopeStyle: 'classic',
-    },
-    products: [
-      {
-        id: `prod_${Date.now()}_1`,
-        title: 'Consultoria / Produto Especial',
-        description: 'Acesso ao meu conteúdo exclusivo ou mentoria 1-on-1.',
-        price: 'R$ 199,00',
-        benefits: ['Acesso imediato', 'Suporte direto', 'Material complementar'],
-        imageUrl: '/src/assets/images/luxury_product_bottle_1794505738842.jpg',
-        buyUrl: 'https://exemplo.com/checkout',
-        badge: 'Novo',
-        active: true,
-      },
-    ],
+    profile: defaults.profile,
+    design: defaults.design,
+    links: defaults.links,
+    gallery: defaults.gallery,
+    posts: defaults.posts,
+    letter: defaults.letter,
+    products: defaults.products,
     analytics: {
       totalViews: 1,
       linkClicks: 0,
@@ -820,12 +705,8 @@ export function createNewAccount(
       ],
     },
     isPublished: true,
-    publishedUrl: `/@${cleanSlug}`,
-    seo: {
-      metaTitle: `${displayName} — Fan Page Oficial`,
-      metaDescription: `Acesse a biografia, links, produtos e revista pessoal de ${displayName}.`,
-      ogImage: '/src/assets/images/hero_helena_editorial_1794505735939.jpg',
-    },
+    publishedUrl: defaults.publishedUrl,
+    seo: defaults.seo,
   };
 
   const accounts = getStoredAccounts();
@@ -833,6 +714,12 @@ export function createNewAccount(
   saveStoredAccounts(accounts);
   setActiveCreatorUsername(cleanSlug);
   return newAccount;
+}
+
+export function restoreCreatorAccountToDefault(account: CreatorAccount): CreatorAccount {
+  const restored = restoreAccountToDefault(account, INITIAL_DEMO_ACCOUNTS);
+  saveAccount(restored);
+  return restored;
 }
 
 export function recordPageView(username: string): void {

@@ -12,13 +12,15 @@ import { ProductsView } from './ProductsView';
 import { SettingsView } from './SettingsView';
 import { NewCreatorModal } from './NewCreatorModal';
 import { ShareModal } from '../public/ShareModal';
+import { AiCopilotModal } from '../ai/AiCopilotModal';
 import { 
   Palette, 
   ExternalLink, 
   Share2, 
   Menu, 
   X,
-  Sparkles
+  Sparkles,
+  RotateCcw
 } from 'lucide-react';
 
 interface DashboardLayoutProps {
@@ -30,6 +32,7 @@ interface DashboardLayoutProps {
   onOpenVisualEditor: () => void;
   onViewPublic: () => void;
   onReloadAll: () => void;
+  onResetDefault: () => void;
 }
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
@@ -41,10 +44,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   onOpenVisualEditor,
   onViewPublic,
   onReloadAll,
+  onResetDefault,
 }) => {
   const [currentTab, setCurrentTab] = useState<DashboardTab>('overview');
   const [showNewModal, setShowNewModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showAiCopilot, setShowAiCopilot] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSelectTab = (tab: DashboardTab) => {

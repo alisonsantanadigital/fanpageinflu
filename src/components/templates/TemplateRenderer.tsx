@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { CreatorAccount, GalleryItem, Post, SocialLink } from '../../types/creator';
+import { CreatorAccount, GalleryItem, Post, SocialLink, FeaturedVideo } from '../../types/creator';
 import { EditorialLuxuryTemplate } from './EditorialLuxuryTemplate';
 import { DarkCreatorTemplate } from './DarkCreatorTemplate';
 import { MinimalPersonalTemplate } from './MinimalPersonalTemplate';
+import { UniversalCreatorTemplate } from './UniversalCreatorTemplate';
 import { InteractiveLetterModal } from '../public/InteractiveLetterModal';
 import { PostReaderModal } from '../public/PostReaderModal';
 import { GalleryLightboxModal } from '../public/GalleryLightboxModal';
@@ -48,13 +49,22 @@ export const TemplateRenderer: React.FC<TemplateRendererProps> = ({ account, isP
 
   const renderTemplate = () => {
     switch (account.design.templateId) {
+      case 'editorial-luxury':
+        return <EditorialLuxuryTemplate {...templateProps} />;
       case 'dark-creator':
         return <DarkCreatorTemplate {...templateProps} />;
       case 'minimal-personal':
         return <MinimalPersonalTemplate {...templateProps} />;
-      case 'editorial-luxury':
+      // Models 04 to 10 are completely functional via UniversalCreatorTemplate
+      case 'lifestyle-journal':
+      case 'fashion-portfolio':
+      case 'cinematic-story':
+      case 'modern-magazine':
+      case 'bold-creator':
+      case 'professional-identity':
+      case 'artistic-experience':
       default:
-        return <EditorialLuxuryTemplate {...templateProps} />;
+        return <UniversalCreatorTemplate {...templateProps} />;
     }
   };
 
