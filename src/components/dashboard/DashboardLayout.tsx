@@ -1,0 +1,228 @@
+import React, { useState } from 'react';
+import { CreatorAccount, TemplateId } from '../../types/creator';
+import { Sidebar, DashboardTab } from './Sidebar';
+import { OverviewView } from './OverviewView';
+import { MyPageView } from './MyPageView';
+import { ProfileView } from './ProfileView';
+import { LinksView } from './LinksView';
+import { GalleryView } from './GalleryView';
+import { PostsView } from './PostsView';
+import { LetterView } from './LetterView';
+import { ProductsView } from './ProductsView';
+import { SettingsView } from './SettingsView';
+import { NewCreatorModal } from './NewCreatorModal';
+import { ShareModal } from '../public/ShareModal';
+import { 
+  Palette, 
+  ExternalLink, 
+  Share2, 
+  Menu, 
+  X,
+  Sparkles
+} from 'lucide-react';
+
+interface DashboardLayoutProps {
+  activeAccount: CreatorAccount;
+  allAccounts: CreatorAccount[];
+  onSelectAccount: (username: string) => void;
+  onUpdateAccount: (updatedAccount: CreatorAccount) => void;
+  onCreateAccount: (username: string, displayName: string, email: string, templateId: TemplateId) => void;
+  onOpenVisualEditor: () => void;
+  onViewPublic: () => void;
+  onReloadAll: () => void;
+}
+
+export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
+  activeAccount,
+  allAccounts,
+  onSelectAccount,
+  onUpdateAccount,
+  onCreateAccount,
+  onOpenVisualEditor,
+  onViewPublic,
+  onReloadAll,
+}) => {
+  const [currentTab, setCurrentTab] = useState<DashboardTab>('overview');
+  const [showNewModal, setShowNewModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleSelectTab = (tab: DashboardTab) => {
+    setCurrentTab(tab);
+    setMobileMenuOpen(false);
+  };
+
+  const renderCurrentView = () => {
+    switch (currentTab) {
+      case 'overview':
+        return (
+          <OverviewView
+            account={activeAccount}
+            onOpenVisualEditor={onOpenVisualEditor}
+            onViewPublic={onViewPublic}
+            onShare={() => setShowShareModal(true)}
+            onNavigateTab={handleSelectTab}
+          />
+        );
+      case 'my-page':
+        return (
+          <MyPageView
+            account={activeAccount}
+            onOpenVisualEditor={onOpenVisualEditor}
+            onViewPublic={onViewPublic}
+            onShare={() => setShowShareModal(true)}
+          />
+        );
+      case 'profile':
+        return <ProfileView account={activeAccount} onUpdate={onUpdateAccount} />;
+      case 'links':
+        return <LinksView account={activeAccount} onUpdate={onUpdateAccount} />;
+      case 'gallery':
+        return <GalleryView account={activeAccount} onUpdate={onUpdateAccount} />;
+      case 'posts':
+        return <PostsView account={activeAccount} onUpdate={onUpdateAccount} />;
+      case 'letter':
+        return <LetterView account={activeAccount} onUpdate={onUpdateAccount} />;
+      case 'products':
+        return <ProductsView account={activeAccount} onUpdate={onUpdateAccount} />;
+      case 'settings':
+        return (
+          <SettingsView
+            account={activeAccount}
+            onUpdate={onUpdateAccount}
+            onReloadAll={onReloadAll}
+          />
+        );
+      default:
+        return (
+          <OverviewView
+            account={activeAccount}
+            onOpenVisualEditor={onOpenVisualEditor}
+            onViewPublic={onViewPublic}
+            onShare={() => setShowShareModal(true)}
+            onNavigateTab={handleSelectTab}
+          />
+        );
+    }
+  };
+
+  return (
+    <div className="flex h-screen bg-neutral-950 text-neutral-100 overflow-hidden font-sans">
+      {/* Desktop Sidebar */}
+      <div className="hidden md:block">
+        <Sidebar
+          currentTab={currentTab}
+          onSelectTab={handleSelectTab}
+          activeAccount={activeAccount}
+          allAccounts={allAccounts}
+          onSelectAccount={onSelectAccount}
+          onNewCreator={() => setShowNewModal(true)}
+          onOpenVisualEditor={onOpenVisualEditor}
+          onViewPublic={onViewPublic}
+        />
+      </div>
+
+      {/* Mobile Sidebar Overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 md:hidden flex">
+          <div
+            className="fixed inset-0 bg-black/75 backdrop-blur-sm"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          <div className="relative z-10 w-64 bg-neutral-900 h-full">
+            <Sidebar
+              currentTab={currentTab}
+              onSelectTab={handleSelectTab}
+              activeAccount={activeAccount}
+              allAccounts={allAccounts}
+              onSelectAccount={onSelectAccount}
+              onNewCreator={() => {
+                setMobileMenuOpen(false);
+                setShowNewModal(true);
+              }}
+              onOpenVisualEditor={() => {
+                setMobileMenuOpen(false);
+                onOpenVisualEditor();
+              }}
+              onViewPublic={() => {
+                setMobileMenuOpen(false);
+                onViewPublic();
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Main Workspace */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Top Navbar */}
+        <header className="h-16 px-4 md:px-8 border-b border-neutral-800 bg-neutral-900/60 backdrop-blur-md flex items-center justify-between shrink-0">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="p-2 rounded-xl text-neutral-400 hover:text-white hover:bg-neutral-800 md:hidden transition-colors"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-white capitalize">
+                {currentTab.replace('-', ' ')}
+              </span>
+              <span className="text-neutral-500 text-xs hidden sm:inline">/</span>
+              <span className="text-xs font-mono text-neutral-400 hidden sm:inline">
+                /@{activeAccount.profile.username}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={onOpenVisualEditor}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-neutral-800 hover:bg-neutral-700 text-amber-400 border border-neutral-700 transition-colors"
+            >
+              <Palette className="w-3.5 h-3.5" />
+              <span>Editor Visual</span>
+            </button>
+
+            <button
+              onClick={() => setShowShareModal(true)}
+              className="p-2 rounded-xl text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors hidden sm:block"
+              title="Compartilhar"
+            >
+              <Share2 className="w-4 h-4" />
+            </button>
+
+            <button
+              onClick={onViewPublic}
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-400 text-neutral-950 transition-colors shadow-sm"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              <span>Ver Fan Page</span>
+            </button>
+          </div>
+        </header>
+
+        {/* Viewport Content */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-8">
+          <div className="max-w-6xl mx-auto">
+            {renderCurrentView()}
+          </div>
+        </main>
+      </div>
+
+      {/* New Creator Modal */}
+      <NewCreatorModal
+        isOpen={showNewModal}
+        onClose={() => setShowNewModal(false)}
+        onCreate={onCreateAccount}
+      />
+
+      {/* Share Modal */}
+      <ShareModal
+        account={activeAccount}
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+      />
+    </div>
+  );
+};

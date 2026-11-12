@@ -1,0 +1,6 @@
+{
+  "name": "Creator World — Plataforma de Fan Pages Premium",
+  "description": "Plataforma SaaS para influenciadores criarem fan pages premium, revistas pessoais, links avançados, galerias, cartas para fãs e páginas de produtos com editor visual em tempo real.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
