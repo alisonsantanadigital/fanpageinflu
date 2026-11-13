@@ -13,14 +13,14 @@ import { SettingsView } from './SettingsView';
 import { NewCreatorModal } from './NewCreatorModal';
 import { ShareModal } from '../public/ShareModal';
 import { AiCopilotModal } from '../ai/AiCopilotModal';
-import { 
-  Palette, 
-  ExternalLink, 
-  Share2, 
-  Menu, 
-  X,
-  Sparkles,
-  RotateCcw
+import { InstagramAutoConnectModal } from '../ai/InstagramAutoConnectModal';
+import { applyGeneratedAndInstagramToAccount } from '../../utils/creatorMapper';
+import {
+  Palette,
+  ExternalLink,
+  Share2,
+  Menu,
+  AlertTriangle
 } from 'lucide-react';
 
 interface DashboardLayoutProps {
@@ -50,11 +50,18 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   const [showNewModal, setShowNewModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showAiCopilot, setShowAiCopilot] = useState(false);
+  const [showInstagramConnect, setShowInstagramConnect] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSelectTab = (tab: DashboardTab) => {
     setCurrentTab(tab);
     setMobileMenuOpen(false);
+  };
+
+  const handleApplyAiGenerated = (generated: Record<string, any>) => {
+    const updatedAccount = applyGeneratedAndInstagramToAccount(activeAccount, generated);
+    onUpdateAccount(updatedAccount);
   };
 
   const renderCurrentView = () => {
@@ -64,6 +71,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <OverviewView
             account={activeAccount}
             onOpenVisualEditor={onOpenVisualEditor}
+            onOpenInstagramConnect={() => setShowInstagramConnect(true)}
             onViewPublic={onViewPublic}
             onShare={() => setShowShareModal(true)}
             onNavigateTab={handleSelectTab}
@@ -96,6 +104,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             account={activeAccount}
             onUpdate={onUpdateAccount}
             onReloadAll={onReloadAll}
+            onOpenInstagramConnect={() => setShowInstagramConnect(true)}
           />
         );
       default:
@@ -103,6 +112,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           <OverviewView
             account={activeAccount}
             onOpenVisualEditor={onOpenVisualEditor}
+            onOpenInstagramConnect={() => setShowInstagramConnect(true)}
             onViewPublic={onViewPublic}
             onShare={() => setShowShareModal(true)}
             onNavigateTab={handleSelectTab}
@@ -123,7 +133,10 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           onSelectAccount={onSelectAccount}
           onNewCreator={() => setShowNewModal(true)}
           onOpenVisualEditor={onOpenVisualEditor}
+          onOpenAiCopilot={() => setShowAiCopilot(true)}
+          onOpenInstagramConnect={() => setShowInstagramConnect(true)}
           onViewPublic={onViewPublic}
+          onResetDefault={() => setShowResetModal(true)}
         />
       </div>
 
@@ -149,9 +162,21 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 setMobileMenuOpen(false);
                 onOpenVisualEditor();
               }}
+              onOpenAiCopilot={() => {
+                setMobileMenuOpen(false);
+                setShowAiCopilot(true);
+              }}
+              onOpenInstagramConnect={() => {
+                setMobileMenuOpen(false);
+                setShowInstagramConnect(true);
+              }}
               onViewPublic={() => {
                 setMobileMenuOpen(false);
                 onViewPublic();
+              }}
+              onResetDefault={() => {
+                setMobileMenuOpen(false);
+                setShowResetModal(true);
               }}
             />
           </div>
@@ -228,6 +253,69 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
       />
+
+      {/* AI Copilot Modal */}
+      <AiCopilotModal
+        isOpen={showAiCopilot}
+        onClose={() => setShowAiCopilot(false)}
+        onApplyGenerated={handleApplyAiGenerated}
+        currentProfileName={activeAccount.profile.displayName}
+      />
+
+      {/* Instagram Auto-Connect + Gemini Modal */}
+      <InstagramAutoConnectModal
+        account={activeAccount}
+        isOpen={showInstagramConnect}
+        onClose={() => setShowInstagramConnect(false)}
+        onApplyAccount={onUpdateAccount}
+        onViewPublic={onViewPublic}
+        onOpenVisualEditor={onOpenVisualEditor}
+      />
+
+      {/* Restore Default Confirmation Dialog */}
+      {showResetModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="dashboard-restore-title"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+        >
+          <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 max-w-md w-full space-y-4 shadow-2xl">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+                <AlertTriangle className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 id="dashboard-restore-title" className="text-base font-semibold text-white">
+                  Restaurar Padrão Original
+                </h3>
+                <p className="text-xs text-neutral-400 mt-1 leading-relaxed">
+                  Deseja restaurar o layout e o conteúdo da página de{' '}
+                  <strong className="text-white">{activeAccount.profile.displayName}</strong> para o template original escolhido na criação?
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2 pt-3 border-t border-neutral-800">
+              <button
+                onClick={() => setShowResetModal(false)}
+                className="px-4 py-2 rounded-xl text-xs font-medium text-neutral-400 hover:text-white"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={() => {
+                  onResetDefault();
+                  setShowResetModal(false);
+                }}
+                className="px-4 py-2 rounded-xl text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-neutral-950 transition-colors"
+              >
+                Confirmar Restauração
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

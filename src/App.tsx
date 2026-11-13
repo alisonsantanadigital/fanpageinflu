@@ -4,14 +4,23 @@ import {
   getStoredAccounts,
   getActiveCreatorUsername,
   setActiveCreatorUsername,
-  getAccountByUsername,
   saveAccount,
   createNewAccount,
+  restoreCreatorAccountToDefault,
 } from './services/storageService';
 import { DashboardLayout } from './components/dashboard/DashboardLayout';
 import { VisualEditor } from './components/editor/VisualEditor';
 import { PublicFanPageView } from './components/public/PublicFanPageView';
 import { NewCreatorModal } from './components/dashboard/NewCreatorModal';
+
+function resolveSlugFromUrl(loadedAccounts: CreatorAccount[]): string | null {
+  const hash = window.location.hash.replace(/^#\/?/, '');
+  const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
+  const rawSlug = (hash || path).replace(/^@+/, '').toLowerCase();
+  if (!rawSlug) return null;
+  const match = loadedAccounts.find(a => a.profile.username.toLowerCase() === rawSlug);
+  return match ? match.profile.username : null;
+}
 
 export default function App() {
   const [accounts, setAccounts] = useState<CreatorAccount[]>([]);
@@ -24,31 +33,60 @@ export default function App() {
     const loadedAccounts = getStoredAccounts();
     setAccounts(loadedAccounts);
 
-    // Check if URL specifies a creator e.g. /@lucasneon or #@lucasneon
-    const hash = window.location.hash.replace('#', '');
-    const path = window.location.pathname.replace('/', '');
-    const matchedSlug = (hash || path).replace(/^@+/, '').toLowerCase();
-
-    if (matchedSlug) {
-      const match = loadedAccounts.find(a => a.profile.username.toLowerCase() === matchedSlug);
-      if (match) {
-        setActiveUsername(match.profile.username);
-        setAppMode('public');
-        return;
-      }
+    const matchedUsername = resolveSlugFromUrl(loadedAccounts);
+    if (matchedUsername) {
+      setActiveUsername(matchedUsername);
+      setAppMode('public');
+      return;
     }
 
     const defaultActive = getActiveCreatorUsername();
     setActiveUsername(defaultActive);
   }, []);
 
+  // Support browser back/forward navigation on /@username URLs
+  useEffect(() => {
+    const onPopState = () => {
+      const loadedAccounts = getStoredAccounts();
+      const matchedUsername = resolveSlugFromUrl(loadedAccounts);
+      if (matchedUsername) {
+        setActiveUsername(matchedUsername);
+        setAppMode('public');
+      } else {
+        setAppMode('dashboard');
+      }
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
   const currentAccount = accounts.find(
     a => a.profile.username.toLowerCase() === activeUsername.toLowerCase()
   ) || accounts[0];
 
+  const navigateToMode = (mode: 'dashboard' | 'editor' | 'public', usernameOverride?: string) => {
+    const targetUsername = usernameOverride || currentAccount?.profile.username || activeUsername;
+    setAppMode(mode);
+    try {
+      if (mode === 'public' && targetUsername) {
+        const targetPath = `/@${targetUsername}`;
+        if (window.location.pathname !== targetPath) {
+          window.history.pushState({}, '', targetPath);
+        }
+      } else if (window.location.pathname !== '/') {
+        window.history.pushState({}, '', '/');
+      }
+    } catch {
+      // Ignore history API errors in restricted contexts
+    }
+  };
+
   const handleSelectAccount = (username: string) => {
     setActiveUsername(username);
     setActiveCreatorUsername(username);
+    if (appMode === 'public') {
+      navigateToMode('public', username);
+    }
   };
 
   const handleUpdateAccount = (updated: CreatorAccount) => {
@@ -71,7 +109,7 @@ export default function App() {
     const refreshed = getStoredAccounts();
     setAccounts(refreshed);
     setActiveUsername(created.profile.username);
-    setAppMode('editor'); // Jump straight into the Visual Editor for the new creator!
+    navigateToMode('editor', created.profile.username);
   };
 
   const handleReloadAll = () => {
@@ -97,8 +135,8 @@ export default function App() {
         onPublish={(updated) => {
           handleUpdateAccount(updated);
         }}
-        onBackToDashboard={() => setAppMode('dashboard')}
-        onViewPublic={() => setAppMode('public')}
+        onBackToDashboard={() => navigateToMode('dashboard')}
+        onViewPublic={() => navigateToMode('public')}
       />
     );
   }
@@ -109,8 +147,8 @@ export default function App() {
       <PublicFanPageView
         account={currentAccount}
         allAccounts={accounts}
-        onBackToDashboard={() => setAppMode('dashboard')}
-        onOpenVisualEditor={() => setAppMode('editor')}
+        onBackToDashboard={() => navigateToMode('dashboard')}
+        onOpenVisualEditor={() => navigateToMode('editor')}
         onSelectAccount={handleSelectAccount}
         onNewCreator={() => setShowNewModal(true)}
       />
@@ -126,9 +164,10 @@ export default function App() {
         onSelectAccount={handleSelectAccount}
         onUpdateAccount={handleUpdateAccount}
         onCreateAccount={handleCreateAccount}
-        onOpenVisualEditor={() => setAppMode('editor')}
-        onViewPublic={() => setAppMode('public')}
+        onOpenVisualEditor={() => navigateToMode('editor')}
+        onViewPublic={() => navigateToMode('public')}
         onReloadAll={handleReloadAll}
+        onResetDefault={() => handleUpdateAccount(restoreCreatorAccountToDefault(currentAccount))}
       />
 
       <NewCreatorModal

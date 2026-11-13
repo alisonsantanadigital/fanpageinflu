@@ -24,7 +24,7 @@ export const PostsView: React.FC<PostsViewProps> = ({ account, onUpdate }) => {
       title: '',
       excerpt: '',
       content: '',
-      coverImage: '/src/assets/images/editorial_art_magazine_1794505737351.jpg',
+      coverImage: '/assets/images/editorial_art_magazine_1794505737351.jpg',
       date: 'Novembro 2026',
       readTime: '4 min de leitura',
       category: 'Editorial',

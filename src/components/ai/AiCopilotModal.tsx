@@ -13,6 +13,7 @@ import {
   Wand2,
   AlertCircle
 } from 'lucide-react';
+import { generateFallbackCreator } from '../../utils/creatorMapper';
 
 interface AiCopilotModalProps {
   isOpen: boolean;
@@ -72,7 +73,7 @@ export const AiCopilotModal: React.FC<AiCopilotModalProps> = ({
 
   const toggleVoiceRecording = () => {
     if (!recognitionRef.current) {
-      alert('Reconhecimento de voz do navegador não suportado neste dispositivo. Por favor, digite o prompt.');
+      setError('Reconhecimento de voz não suportado neste navegador. Digite seu briefing abaixo.');
       return;
     }
 
@@ -105,8 +106,18 @@ export const AiCopilotModal: React.FC<AiCopilotModalProps> = ({
     setError(null);
     setStatusStep('Conectando ao Gemini AI...');
 
+    const applyCreator = (creatorData: Record<string, any>) => {
+      setStatusStep('Aplicando perfil e paleta recomendada!');
+      setTimeout(() => {
+        onApplyGenerated(creatorData);
+        setLoading(false);
+        setStatusStep(null);
+        onClose();
+      }, 600);
+    };
+
     try {
-      setTimeout(() => setStatusStep('Gerando biografia, publicações e produtos...'), 1200);
+      setTimeout(() => setStatusStep('Gerando biografia, publicações e produtos...'), 1000);
 
       const response = await fetch('/api/ai/autofill', {
         method: 'POST',
@@ -114,24 +125,21 @@ export const AiCopilotModal: React.FC<AiCopilotModalProps> = ({
         body: JSON.stringify({ prompt: promptText.trim() }),
       });
 
+      const contentType = response.headers.get('content-type') || '';
+      if (!response.ok || !contentType.includes('application/json')) {
+        applyCreator(generateFallbackCreator(promptText.trim()));
+        return;
+      }
+
       const data = await response.json();
 
       if (data.success && data.creator) {
-        setStatusStep('Aplicando perfil e paleta recomendada!');
-        setTimeout(() => {
-          onApplyGenerated(data.creator);
-          setLoading(false);
-          setStatusStep(null);
-          onClose();
-        }, 800);
+        applyCreator(data.creator);
       } else {
-        throw new Error(data.error || 'Não foi possível gerar os dados.');
+        applyCreator(generateFallbackCreator(promptText.trim()));
       }
-    } catch (err: any) {
-      console.error('Error generating creator:', err);
-      setError('Houve uma oscilação na conexão com a IA. Aplicando modelo padrão autoral.');
-      setLoading(false);
-      setStatusStep(null);
+    } catch {
+      applyCreator(generateFallbackCreator(promptText.trim()));
     }
   };
 

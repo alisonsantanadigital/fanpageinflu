@@ -143,17 +143,17 @@ export function buildDefaultAccountSections(
 
   const defaultAvatar =
     templateId === 'dark-creator'
-      ? '/src/assets/images/hero_lucas_dark_1794505736707.jpg'
+      ? '/assets/images/hero_lucas_dark_1794505736707.jpg'
       : templateId === 'minimal-personal'
-      ? '/src/assets/images/hero_clara_minimal_1794505736987.jpg'
-      : '/src/assets/images/hero_helena_editorial_1794505735939.jpg';
+      ? '/assets/images/hero_clara_minimal_1794505736987.jpg'
+      : '/assets/images/hero_helena_editorial_1794505735939.jpg';
 
   const defaultCover =
     templateId === 'dark-creator'
-      ? '/src/assets/images/hero_lucas_dark_1794505736707.jpg'
+      ? '/assets/images/hero_lucas_dark_1794505736707.jpg'
       : templateId === 'minimal-personal'
-      ? '/src/assets/images/hero_clara_minimal_1794505736987.jpg'
-      : '/src/assets/images/editorial_art_magazine_1794505737351.jpg';
+      ? '/assets/images/hero_clara_minimal_1794505736987.jpg'
+      : '/assets/images/editorial_art_magazine_1794505737351.jpg';
 
   return {
     profile: {
@@ -247,7 +247,7 @@ export function buildDefaultAccountSections(
         description: 'Acesso ao meu conteúdo exclusivo ou mentoria 1-on-1.',
         price: 'R$ 199,00',
         benefits: ['Acesso imediato', 'Suporte direto', 'Material complementar'],
-        imageUrl: '/src/assets/images/luxury_product_bottle_1794505738842.jpg',
+        imageUrl: '/assets/images/luxury_product_bottle_1794505738842.jpg',
         buyUrl: 'https://exemplo.com/checkout',
         badge: 'Novo',
         active: true,

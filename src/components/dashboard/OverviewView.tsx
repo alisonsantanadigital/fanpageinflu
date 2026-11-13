@@ -11,12 +11,14 @@ import {
   Mail, 
   ShoppingBag,
   Palette,
-  Sparkles
+  Sparkles,
+  Instagram
 } from 'lucide-react';
 
 interface OverviewViewProps {
   account: CreatorAccount;
   onOpenVisualEditor: () => void;
+  onOpenInstagramConnect: () => void;
   onViewPublic: () => void;
   onShare: () => void;
   onNavigateTab: (tab: any) => void;
@@ -25,6 +27,7 @@ interface OverviewViewProps {
 export const OverviewView: React.FC<OverviewViewProps> = ({
   account,
   onOpenVisualEditor,
+  onOpenInstagramConnect,
   onViewPublic,
   onShare,
   onNavigateTab,
@@ -89,7 +92,15 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-3 w-full md:w-auto">
+        <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+          <button
+            onClick={onOpenInstagramConnect}
+            className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-rose-500/20 to-purple-500/20 hover:from-rose-500/30 hover:to-purple-500/30 text-rose-200 border border-rose-500/40 transition-all"
+          >
+            <Instagram className="w-4 h-4 text-rose-400" />
+            <span>Instagram + IA</span>
+          </button>
+
           <button
             onClick={onViewPublic}
             className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-neutral-800 hover:bg-neutral-700 text-white border border-neutral-700 transition-all"

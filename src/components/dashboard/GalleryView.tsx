@@ -137,7 +137,7 @@ export const GalleryView: React.FC<GalleryViewProps> = ({ account, onUpdate }) =
               </label>
               <input
                 type="url"
-                placeholder="/src/assets/images/... ou URL HTTPS"
+                placeholder="/assets/images/... ou URL HTTPS"
                 value={newMediaUrl}
                 onChange={(e) => setNewMediaUrl(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg bg-neutral-800 border border-neutral-700 text-xs font-mono text-white focus:outline-none focus:border-amber-500"

@@ -15,7 +15,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ account, onUpdate })
   const [newTitle, setNewTitle] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [newPrice, setNewPrice] = useState('R$ ');
-  const [newImageUrl, setNewImageUrl] = useState('/src/assets/images/luxury_product_bottle_1794505738842.jpg');
+  const [newImageUrl, setNewImageUrl] = useState('/assets/images/luxury_product_bottle_1794505738842.jpg');
   const [newBuyUrl, setNewBuyUrl] = useState('');
   const [newBadge, setNewBadge] = useState('');
   const [newBenefit, setNewBenefit] = useState('');
@@ -40,7 +40,7 @@ export const ProductsView: React.FC<ProductsViewProps> = ({ account, onUpdate })
       title: newTitle.trim(),
       description: newDescription.trim(),
       price: newPrice.trim() || undefined,
-      imageUrl: newImageUrl.trim() || '/src/assets/images/luxury_product_bottle_1794505738842.jpg',
+      imageUrl: newImageUrl.trim() || '/assets/images/luxury_product_bottle_1794505738842.jpg',
       buyUrl: newBuyUrl.trim(),
       badge: newBadge.trim() || undefined,
       benefits: benefitsList,

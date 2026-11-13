@@ -25,8 +25,8 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
       tagline: 'Diretora Criativa, Curadora de Estilo & Crítica de Moda',
       bio: 'Especialista em alta-costura, design editorial e estética contemporânea. Construo narrativas visuais entre Paris e São Paulo.',
       fullStory: 'Com mais de uma década atuando entre editoriais em Paris, semanas de moda em Milão e projetos especiais para grandes marcas globais, dedico meu espaço a celebrar o artesanato, a proporção e a arte de se vestir com propósito.',
-      avatarUrl: '/src/assets/images/hero_helena_editorial_1794505735939.jpg',
-      coverUrl: '/src/assets/images/editorial_art_magazine_1794505737351.jpg',
+      avatarUrl: '/assets/images/hero_helena_editorial_1794505735939.jpg',
+      coverUrl: '/assets/images/editorial_art_magazine_1794505737351.jpg',
       location: 'Paris / São Paulo',
       interests: ['Alta-Costura', 'Arquitetura Brutalista', 'Fotografia Analógica', 'Cerâmica', 'Design Escandinavo'],
       trajectory: [
@@ -133,7 +133,7 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
         id: 'gal_h1',
         title: 'Atelier em Paris — Luz Matinal',
         type: 'photo',
-        mediaUrl: '/src/assets/images/hero_helena_editorial_1794505735939.jpg',
+        mediaUrl: '/assets/images/hero_helena_editorial_1794505735939.jpg',
         caption: 'Momentos de estudo e curadoria de tecidos antes do desfile.',
         tags: ['Paris', 'Atelier', 'Editorial'],
         category: 'Backstage',
@@ -144,7 +144,7 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
         id: 'gal_h2',
         title: 'Campanha Silhueta Escultórica',
         type: 'photo',
-        mediaUrl: '/src/assets/images/editorial_art_magazine_1794505737351.jpg',
+        mediaUrl: '/assets/images/editorial_art_magazine_1794505737351.jpg',
         caption: 'Ensaio fotográfico explorando a harmonia entre corpo e concreto.',
         tags: ['Arquitetura', 'Campanha', 'Moda'],
         category: 'Campanhas',
@@ -155,7 +155,7 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
         id: 'gal_h3',
         title: 'Fragrância Aurélia — Detalhe',
         type: 'photo',
-        mediaUrl: '/src/assets/images/luxury_product_bottle_1794505738842.jpg',
+        mediaUrl: '/assets/images/luxury_product_bottle_1794505738842.jpg',
         caption: 'Concepção do vidro em formato minimalista com tampa em nogueira.',
         tags: ['Design', 'Perfume', 'Criação'],
         category: 'Produtos',
@@ -170,7 +170,7 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
         title: 'A Arte da Silhueta Contemporânea na Alta-Costura',
         excerpt: 'Como o minimalismo escultural e as fibras sustentáveis estão redefinindo as passarelas parisienses.',
         content: `A elegância nunca foi sobre excesso; pelo contrário, sempre foi sobre a coragem de subtrair. Quando observamos os mestres do corte clássico, como Cristobal Balenciaga e Madeleine Vionnet, percebemos que a maestria reside na gravidade e no caimento do tecido.\n\nNesta temporada, presenciei em primeira mão a transição de tecidos pesados para fibras inteligentes que respiram e se adaptam à iluminação natural. A moda é, acima de tudo, um espelho da sociedade que desejamos construir: atenta, consciente e duradoura.`,
-        coverImage: '/src/assets/images/editorial_art_magazine_1794505737351.jpg',
+        coverImage: '/assets/images/editorial_art_magazine_1794505737351.jpg',
         date: '10 de Novembro, 2026',
         readTime: '5 min de leitura',
         category: 'Editorial',
@@ -182,7 +182,7 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
         title: 'Diário de Paris: Notas do Caderno de Desenho',
         excerpt: 'Bastidores, impressões íntimas e os detalhes que as câmeras dos grandes eventos deixam passar.',
         content: `Acordar às seis da manhã na Rue de Rivoli tem um ritmo particular. O aroma de café fresco misturado à neblina sobre o Sena dá o tom do dia.\n\nNos ateliês, as costureiras trabalham em silêncio absoluto. Cada prega feita à mão leva até quarenta horas de atenção minuciosa. Estar aqui é reaprender a valorizar o tempo humano.`,
-        coverImage: '/src/assets/images/hero_helena_editorial_1794505735939.jpg',
+        coverImage: '/assets/images/hero_helena_editorial_1794505735939.jpg',
         date: '28 de Outubro, 2026',
         readTime: '4 min de leitura',
         category: 'Diário',
@@ -206,7 +206,7 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
         description: 'Fragrância autoral com notas de bergamota da Calábria, figo seco, cedro e flor de laranjeira.',
         price: 'R$ 480,00',
         benefits: ['Fragrância unissex de longa duração', 'Ingredientes botânicos de colheita sustentável', 'Vidro recarregável artesanal'],
-        imageUrl: '/src/assets/images/luxury_product_bottle_1794505738842.jpg',
+        imageUrl: '/assets/images/luxury_product_bottle_1794505738842.jpg',
         buyUrl: 'https://exemplo.com/comprar/aurelia',
         badge: 'Edição Limitada',
         active: true,
@@ -217,7 +217,7 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
         description: 'Edição de colecionador em capa dura com 240 páginas de fotografia editorial e textos reflexivos.',
         price: 'R$ 195,00',
         benefits: ['Papel couchê fosco 170g', 'Textos inéditos e ensaios fotográficos', 'Acompanha marca-páginas em linho'],
-        imageUrl: '/src/assets/images/editorial_art_magazine_1794505737351.jpg',
+        imageUrl: '/assets/images/editorial_art_magazine_1794505737351.jpg',
         buyUrl: 'https://exemplo.com/comprar/livro',
         badge: 'Best Seller',
         active: true,
@@ -243,7 +243,7 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
     seo: {
       metaTitle: 'Helena Salles — Fan Page Oficial & Revista Editorial',
       metaDescription: 'Explore o universo de moda, arte, perfumaria e reflexões da diretora criativa Helena Salles.',
-      ogImage: '/src/assets/images/hero_helena_editorial_1794505735939.jpg',
+      ogImage: '/assets/images/hero_helena_editorial_1794505735939.jpg',
     },
     instagramIntegration: {
       connected: true,
@@ -270,8 +270,8 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
       tagline: 'Produtor Musical, Sound Designer & Explorador Tecnológico',
       bio: 'Criando paisagens sonoras cinemáticas, sintetizadores modulares e explorando a interseção entre áudio e inteligência artificial.',
       fullStory: 'Trabalho na vanguarda da produção de áudio eletrônico há 8 anos. Meus trabalhos já embalaram trilhas sonoras de games independentes, mostras de arte imersiva e palcos de festivais de música eletrônica.',
-      avatarUrl: '/src/assets/images/hero_lucas_dark_1794505736707.jpg',
-      coverUrl: '/src/assets/images/hero_lucas_dark_1794505736707.jpg',
+      avatarUrl: '/assets/images/hero_lucas_dark_1794505736707.jpg',
+      coverUrl: '/assets/images/hero_lucas_dark_1794505736707.jpg',
       location: 'São Paulo / Berlim',
       interests: ['Sintetizadores Modulares Eurorack', 'Sound Design Sci-Fi', 'Ableton Live 12', 'Filtros Analógicos', 'Game Audio'],
       trajectory: [
@@ -367,7 +367,7 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
         id: 'gal_l1',
         title: 'O Muro Modular de Eurorack',
         type: 'photo',
-        mediaUrl: '/src/assets/images/hero_lucas_dark_1794505736707.jpg',
+        mediaUrl: '/assets/images/hero_lucas_dark_1794505736707.jpg',
         caption: 'Meu setup de estúdio com mais de 30 módulos analógicos conectados.',
         tags: ['Studio', 'Eurorack', 'Analog'],
         category: 'Equipamentos',
@@ -382,7 +382,7 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
         title: 'Por Que o Áudio Analógico Ficou Ainda Mais Relevante com a IA',
         excerpt: 'Em um mundo onde algoritmos geram músicas em segundos, a imprevisibilidade da voltagem real é pura poesia.',
         content: `Todos os dias me perguntam se tenho medo da IA generativa no áudio. Minha resposta é sempre não. A IA é maravilhosa para automações e para inspirar esboços rápidos, mas o que move o ouvinte humano é a imperfeição.\n\nQuando um módulo analógico esquenta e desafina 3 cents para cima, ele cria uma ressonância harmônica viva que nenhum modelo matemático congelado replica da mesma forma. A textura é humana.`,
-        coverImage: '/src/assets/images/hero_lucas_dark_1794505736707.jpg',
+        coverImage: '/assets/images/hero_lucas_dark_1794505736707.jpg',
         date: '05 de Novembro, 2026',
         readTime: '6 min de leitura',
         category: 'Produção',
@@ -406,7 +406,7 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
         description: 'Pacote completo com 450+ samples gravados em fita cassete e sintetizadores analógicos.',
         price: 'R$ 147,00',
         benefits: ['100% Royalty Free para uso comercial', 'Kits de bateria, basslines e texturas granulares', 'Formato WAV 24-bit 96kHz'],
-        imageUrl: '/src/assets/images/hero_lucas_dark_1794505736707.jpg',
+        imageUrl: '/assets/images/hero_lucas_dark_1794505736707.jpg',
         buyUrl: 'https://exemplo.com/comprar/modularpack',
         badge: 'Mais Vendido',
         active: true,
@@ -432,7 +432,7 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
     seo: {
       metaTitle: 'Lucas Vane — Sound Design, Beats & Synth Lab',
       metaDescription: 'Universo sonoro oficial de Lucas Vane: faixas, presets de áudio, cursos e comunidade VIP.',
-      ogImage: '/src/assets/images/hero_lucas_dark_1794505736707.jpg',
+      ogImage: '/assets/images/hero_lucas_dark_1794505736707.jpg',
     },
   },
 
@@ -453,8 +453,8 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
       tagline: 'Escritora, Podcaster & Mentora de Vida Consciente',
       bio: 'Compartilhando práticas de desaceleração, diários reflexivos, bem-estar emocional e rotinas com mais presença.',
       fullStory: 'Deixei o ritmo frenético corporativo em 2020 para me dedicar à escrita terapêutica e aos encontros comunitários. Hoje guio milhares de mulheres a redescobrirem o prazer dos pequenos rituais.',
-      avatarUrl: '/src/assets/images/hero_clara_minimal_1794505736987.jpg',
-      coverUrl: '/src/assets/images/hero_clara_minimal_1794505736987.jpg',
+      avatarUrl: '/assets/images/hero_clara_minimal_1794505736987.jpg',
+      coverUrl: '/assets/images/hero_clara_minimal_1794505736987.jpg',
       location: 'Florianópolis, SC',
       interests: ['Leitura Consciente', 'Chás Orgânicos', 'Cerâmica Manual', 'Meditação Guiada', 'Caminhadas na Praia'],
       trajectory: [
@@ -536,7 +536,7 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
         id: 'gal_c1',
         title: 'Manhãs com Leitura e Luz Natural',
         type: 'photo',
-        mediaUrl: '/src/assets/images/hero_clara_minimal_1794505736987.jpg',
+        mediaUrl: '/assets/images/hero_clara_minimal_1794505736987.jpg',
         caption: 'O refúgio onde escrevo as cartas de domingo.',
         tags: ['Casa', 'Livros', 'Rotina'],
         category: 'Vida',
@@ -551,7 +551,7 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
         title: 'O Hábito de Desacelerar na Era da Notificação Constante',
         excerpt: 'Por que criar pausas intencionais ao longo do dia é um ato de preservação mental.',
         content: `Nós fomos condicionados a acreditar que tempo livre precisa ser preenchido por produtividade. Mas a criatividade verdadeira só nasce no espaço em branco.\n\nQuando permitimos que a mente descanse sem um celular na mão, nós começamos a ouvir nossos próprios pensamentos novamente. Experimente 15 minutos de silêncio hoje.`,
-        coverImage: '/src/assets/images/hero_clara_minimal_1794505736987.jpg',
+        coverImage: '/assets/images/hero_clara_minimal_1794505736987.jpg',
         date: '02 de Novembro, 2026',
         readTime: '4 min de leitura',
         category: 'Presença',
@@ -575,7 +575,7 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
         description: 'Capa em linho bordado, papel pólen 90g, visão trimestral e rastreador de hábitos.',
         price: 'R$ 139,00',
         benefits: ['Estrutura não-datada (comece quando quiser)', 'Guias de reflexão de início e fim de mês', 'Frete grátis para todo o Brasil'],
-        imageUrl: '/src/assets/images/hero_clara_minimal_1794505736987.jpg',
+        imageUrl: '/assets/images/hero_clara_minimal_1794505736987.jpg',
         buyUrl: 'https://exemplo.com/comprar/planner',
         badge: 'Favorito dos Fãs',
         active: true,
@@ -601,10 +601,48 @@ export const INITIAL_DEMO_ACCOUNTS: CreatorAccount[] = [
     seo: {
       metaTitle: 'Clara Martins — Vida Consciente, Diários & Comunidade',
       metaDescription: 'Fan page oficial de Clara Martins: textos, podcast Tempo Presente, planner e reflexões.',
-      ogImage: '/src/assets/images/hero_clara_minimal_1794505736987.jpg',
+      ogImage: '/assets/images/hero_clara_minimal_1794505736987.jpg',
     },
   },
 ];
+
+function normalizeAssetUrl(url?: string): string | undefined {
+  if (!url) return url;
+  return url.replace(/^\/src\/assets\/images\//, '/assets/images/');
+}
+
+function normalizeAccountAssets(account: CreatorAccount): CreatorAccount {
+  return {
+    ...account,
+    profile: {
+      ...account.profile,
+      avatarUrl: normalizeAssetUrl(account.profile.avatarUrl) || '/assets/images/hero_helena_editorial_1794505735939.jpg',
+      coverUrl: normalizeAssetUrl(account.profile.coverUrl) || '/assets/images/editorial_art_magazine_1794505737351.jpg',
+      logoUrl: normalizeAssetUrl(account.profile.logoUrl),
+    },
+    gallery: (account.gallery || []).map((item) => ({
+      ...item,
+      mediaUrl: normalizeAssetUrl(item.mediaUrl) || item.mediaUrl,
+      thumbnail: normalizeAssetUrl(item.thumbnail),
+    })),
+    posts: (account.posts || []).map((post) => ({
+      ...post,
+      coverImage: normalizeAssetUrl(post.coverImage) || post.coverImage,
+    })),
+    products: (account.products || []).map((product) => ({
+      ...product,
+      imageUrl: normalizeAssetUrl(product.imageUrl) || product.imageUrl,
+    })),
+    letter: {
+      ...account.letter,
+      photoUrl: normalizeAssetUrl(account.letter?.photoUrl),
+    },
+    seo: {
+      ...account.seo,
+      ogImage: normalizeAssetUrl(account.seo?.ogImage),
+    },
+  };
+}
 
 export function getStoredAccounts(): CreatorAccount[] {
   try {
@@ -618,7 +656,7 @@ export function getStoredAccounts(): CreatorAccount[] {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_DEMO_ACCOUNTS));
       return INITIAL_DEMO_ACCOUNTS;
     }
-    return parsed;
+    return parsed.map(normalizeAccountAssets);
   } catch (err) {
     console.error('Error reading accounts from storage, restoring defaults', err);
     return INITIAL_DEMO_ACCOUNTS;
@@ -626,10 +664,20 @@ export function getStoredAccounts(): CreatorAccount[] {
 }
 
 export function saveStoredAccounts(accounts: CreatorAccount[]): void {
+  const normalized = accounts.map(normalizeAccountAssets);
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
   } catch (err) {
-    console.error('Error saving accounts to localStorage', err);
+    console.error('Error saving accounts to localStorage, attempting compact save', err);
+    try {
+      const compact = normalized.map((acc) => ({
+        ...acc,
+        gallery: acc.gallery.slice(0, 6),
+      }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(compact));
+    } catch (retryErr) {
+      console.error('Compact save failed', retryErr);
+    }
   }
 }
 
@@ -658,12 +706,13 @@ export function getAccountByUsername(username: string): CreatorAccount | undefin
 }
 
 export function saveAccount(updatedAccount: CreatorAccount): void {
+  const normalized = normalizeAccountAssets(updatedAccount);
   const accounts = getStoredAccounts();
-  const index = accounts.findIndex(acc => acc.id === updatedAccount.id);
+  const index = accounts.findIndex(acc => acc.id === normalized.id);
   if (index >= 0) {
-    accounts[index] = updatedAccount;
+    accounts[index] = normalized;
   } else {
-    accounts.push(updatedAccount);
+    accounts.push(normalized);
   }
   saveStoredAccounts(accounts);
 }

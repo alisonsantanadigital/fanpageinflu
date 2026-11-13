@@ -83,6 +83,7 @@ export interface SocialLink {
   order: number;
   clicksCount: number;
   image?: string;
+  badge?: string;
 }
 
 export interface GalleryItem {
@@ -96,6 +97,63 @@ export interface GalleryItem {
   category: string;
   date: string;
   aspectRatio?: '16:9' | '4:3' | '1:1' | '3:4';
+}
+
+export interface FeaturedVideo {
+  id: string;
+  title: string;
+  description: string;
+  videoUrl: string;
+  thumbnail: string;
+  duration?: string;
+  views?: string;
+  category?: string;
+}
+
+export interface SocialPlatformMetric {
+  platform: 'instagram' | 'tiktok' | 'youtube' | string;
+  handle: string;
+  followers: string;
+  totalViews?: string;
+  storyViews?: string;
+}
+
+export interface CommercialPackage {
+  id: string;
+  type: 'avulso' | 'combinado' | 'recorrente';
+  title: string;
+  description: string;
+  price?: string;
+  deliverables?: string[];
+  popular?: boolean;
+}
+
+export interface MediaKitData {
+  tagline: string;
+  headline: string;
+  quote: string;
+  summary: string;
+  totalFollowers: string;
+  monthlyInteractions: string;
+  totalViews: string;
+  pdfDownloadUrl?: string;
+  platforms: SocialPlatformMetric[];
+  demographics: {
+    femalePercentage: number;
+    malePercentage: number;
+    capitalsPercentage: number;
+    primaryAgeRange: string;
+    keyHighlights: string[];
+  };
+  contentPillars: { title: string; description: string }[];
+  categoriesFit: string[];
+  packages: CommercialPackage[];
+  commercialContact: {
+    name: string;
+    email: string;
+    whatsapp: string;
+    availabilityNotice?: string;
+  };
 }
 
 export interface Post {
@@ -133,6 +191,7 @@ export interface ProductItem {
   imageUrl: string;
   buyUrl: string;
   badge?: string;
+  format?: string;
   active: boolean;
 }
 
@@ -158,9 +217,11 @@ export interface CreatorAccount {
   design: DesignSettings;
   links: SocialLink[];
   gallery: GalleryItem[];
+  videos?: FeaturedVideo[];
   posts: Post[];
   letter: FanLetter;
   products: ProductItem[];
+  mediaKit?: MediaKitData;
   analytics: CreatorAnalytics;
   isPublished: boolean;
   publishedUrl: string;

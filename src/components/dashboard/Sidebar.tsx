@@ -17,7 +17,7 @@ import {
   Sparkles,
   CheckCircle2,
   RotateCcw,
-  Video
+  Instagram
 } from 'lucide-react';
 
 export type DashboardTab =
@@ -41,6 +41,7 @@ interface SidebarProps {
   onNewCreator: () => void;
   onOpenVisualEditor: () => void;
   onOpenAiCopilot: () => void;
+  onOpenInstagramConnect: () => void;
   onViewPublic: () => void;
   onResetDefault: () => void;
 }
@@ -54,6 +55,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onNewCreator,
   onOpenVisualEditor,
   onOpenAiCopilot,
+  onOpenInstagramConnect,
   onViewPublic,
   onResetDefault,
 }) => {
@@ -164,8 +166,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
         )}
       </div>
 
-      {/* AI Copilot Action in Sidebar */}
-      <div className="px-3 pt-3">
+      {/* AI Copilot & Instagram Auto-Fill Actions in Sidebar */}
+      <div className="px-3 pt-3 space-y-2">
+        <button
+          onClick={onOpenInstagramConnect}
+          className="w-full flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-rose-500/15 via-purple-500/10 to-transparent border border-rose-500/30 hover:bg-rose-500/20 text-rose-200 text-xs font-semibold transition-all group"
+        >
+          <div className="flex items-center gap-2">
+            <Instagram className="w-4 h-4 text-rose-400 group-hover:scale-110 transition-transform" />
+            <span>Instagram + IA</span>
+          </div>
+          <span className="text-[10px] font-mono uppercase bg-rose-500/90 text-white font-bold px-1.5 py-0.5 rounded">
+            {activeAccount.instagramIntegration?.connected ? 'Conectado' : 'Auto-Fill'}
+          </span>
+        </button>
+
         <button
           onClick={onOpenAiCopilot}
           className="w-full flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-amber-500/15 via-amber-400/10 to-transparent border border-amber-500/30 hover:bg-amber-500/20 text-amber-300 text-xs font-semibold transition-all group"
@@ -223,11 +238,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Restore Defaults button */}
         <button
-          onClick={() => {
-            if (confirm('Deseja restaurar as configurações e dados originais de demonstração?')) {
-              onResetDefault();
-            }
-          }}
+          onClick={onResetDefault}
           className="w-full flex items-center justify-center gap-1.5 py-1.5 text-xs text-neutral-500 hover:text-amber-400 transition-colors"
         >
           <RotateCcw className="w-3.5 h-3.5" />

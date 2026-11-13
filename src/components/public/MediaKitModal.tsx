@@ -34,7 +34,7 @@ export const MediaKitModal: React.FC<MediaKitModalProps> = ({ account, isOpen, o
   const [brandMessage, setBrandMessage] = useState('');
   const [proposalSent, setProposalSent] = useState(false);
 
-  if (!isOpen) return null;
+  if (!isOpen || !account.mediaKit) return null;
 
   const { mediaKit, profile } = account;
 
@@ -42,12 +42,15 @@ export const MediaKitModal: React.FC<MediaKitModalProps> = ({ account, isOpen, o
     e.preventDefault();
     setProposalSent(true);
     setTimeout(() => {
-      // Create mailto or whatsapp link
       const text = encodeURIComponent(
         `Olá! Sou da marca ${brandName} e gostaria de solicitar uma proposta comercial para ${profile.displayName} (Formato: ${selectedPackage?.title || 'Campanha Personalizada'}). Mensagem: ${brandMessage}`
       );
       if (mediaKit.commercialContact?.whatsapp) {
-        window.open(`https://api.whatsapp.com/send?phone=${mediaKit.commercialContact.whatsapp.replace(/\D/g, '')}&text=${text}`, '_blank');
+        const a = document.createElement('a');
+        a.href = `https://api.whatsapp.com/send?phone=${mediaKit.commercialContact.whatsapp.replace(/\D/g, '')}&text=${text}`;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.click();
       } else {
         window.location.href = `mailto:${mediaKit.commercialContact.email}?subject=Proposta Comercial - ${brandName}&body=${text}`;
       }

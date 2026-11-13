@@ -23,13 +23,21 @@ interface SettingsViewProps {
   account: CreatorAccount;
   onUpdate: (updatedAccount: CreatorAccount) => void;
   onReloadAll: () => void;
+  onOpenInstagramConnect?: () => void;
 }
 
-export const SettingsView: React.FC<SettingsViewProps> = ({ account, onUpdate, onReloadAll }) => {
+export const SettingsView: React.FC<SettingsViewProps> = ({
+  account,
+  onUpdate,
+  onReloadAll,
+  onOpenInstagramConnect,
+}) => {
   const [slug, setSlug] = useState(account.profile.username);
   const [metaTitle, setMetaTitle] = useState(account.seo?.metaTitle || '');
   const [metaDescription, setMetaDescription] = useState(account.seo?.metaDescription || '');
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [confirmDemoReset, setConfirmDemoReset] = useState(false);
   const [showSqlModal, setShowSqlModal] = useState(false);
   const [showInstagramModal, setShowInstagramModal] = useState(false);
   const [copiedSql, setCopiedSql] = useState(false);
@@ -76,20 +84,24 @@ export const SettingsView: React.FC<SettingsViewProps> = ({ account, onUpdate, o
       const content = event.target?.result as string;
       const res = importDatabaseJSON(content);
       if (res.success) {
-        alert(res.message);
+        setErrorMsg(null);
+        setStatusMsg(res.message);
+        setTimeout(() => setStatusMsg(null), 3000);
         onReloadAll();
       } else {
-        alert(res.message);
+        setErrorMsg(res.message);
+        setTimeout(() => setErrorMsg(null), 4000);
       }
     };
     reader.readAsText(file);
   };
 
   const handleResetDemo = () => {
-    if (confirm('Deseja restaurar as 3 contas de demonstração originais? Isso resetará alterações locais.')) {
-      resetToDemoData();
-      onReloadAll();
-    }
+    resetToDemoData();
+    setConfirmDemoReset(false);
+    setStatusMsg('Contas de demonstração restauradas!');
+    setTimeout(() => setStatusMsg(null), 3000);
+    onReloadAll();
   };
 
   const handleManualInstagramImport = () => {
@@ -262,6 +274,13 @@ ON public.creator_profiles FOR ALL USING (auth.uid() = user_id);
         </button>
       </div>
 
+      {errorMsg && (
+        <div className="p-3 rounded-xl bg-rose-950/60 border border-rose-800/80 text-rose-300 text-xs flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{errorMsg}</span>
+        </div>
+      )}
+
       {/* 1. URL & Slug Exclusivo */}
       <div className="p-6 rounded-2xl bg-neutral-900 border border-neutral-800 space-y-4">
         <h2 className="text-sm font-semibold text-white flex items-center gap-2">
@@ -346,10 +365,16 @@ ON public.creator_profiles FOR ALL USING (auth.uid() = user_id);
           </div>
 
           <button
-            onClick={() => setShowInstagramModal(true)}
+            onClick={() => {
+              if (onOpenInstagramConnect) {
+                onOpenInstagramConnect();
+              } else {
+                setShowInstagramModal(true);
+              }
+            }}
             className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-neutral-800 hover:bg-neutral-700 text-amber-400 border border-neutral-700 transition-colors"
           >
-            Gerenciar Conexão
+            Conectar & Auto-Preencher
           </button>
         </div>
 
@@ -401,13 +426,30 @@ ON public.creator_profiles FOR ALL USING (auth.uid() = user_id);
             <input type="file" accept=".json" onChange={handleImportJson} className="hidden" />
           </label>
 
-          <button
-            onClick={handleResetDemo}
-            className="flex items-center justify-center gap-2 p-3 rounded-xl bg-neutral-800/80 hover:bg-neutral-800 border border-neutral-700 text-xs text-neutral-400 hover:text-rose-400 transition-colors"
-          >
-            <RotateCcw className="w-4 h-4" />
-            <span>Restaurar Demo</span>
-          </button>
+          {confirmDemoReset ? (
+            <div className="flex items-center gap-2 p-2 rounded-xl bg-rose-950/40 border border-rose-800/60">
+              <button
+                onClick={handleResetDemo}
+                className="flex-1 py-1.5 px-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold transition-colors"
+              >
+                Confirmar Reset
+              </button>
+              <button
+                onClick={() => setConfirmDemoReset(false)}
+                className="py-1.5 px-2.5 rounded-lg bg-neutral-800 text-neutral-300 hover:text-white text-xs transition-colors"
+              >
+                Cancelar
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setConfirmDemoReset(true)}
+              className="flex items-center justify-center gap-2 p-3 rounded-xl bg-neutral-800/80 hover:bg-neutral-800 border border-neutral-700 text-xs text-neutral-400 hover:text-rose-400 transition-colors"
+            >
+              <RotateCcw className="w-4 h-4" />
+              <span>Restaurar Demo</span>
+            </button>
+          )}
         </div>
       </div>
 

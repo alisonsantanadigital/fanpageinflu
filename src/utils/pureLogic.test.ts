@@ -242,3 +242,117 @@ test('restoreAccountToDefault restores demo account using demo snapshot even if 
   assert.equal(restored.analytics.totalViews, 999);
 });
 
+import {
+  applyGeneratedAndInstagramToAccount,
+  decodeHtmlEntities,
+  generateFallbackCreator,
+  parseInstagramOgProfile,
+} from './creatorMapper';
+
+test('applyGeneratedAndInstagramToAccount populates Instagram photos and AI-generated fields immediately', () => {
+  const baseDefaults = buildDefaultAccountSections(
+    'criador_teste',
+    'Criador Teste',
+    'criador@example.com',
+    'editorial-luxury',
+    'prof_teste',
+    1000
+  );
+
+  const baseAccount: CreatorAccount = {
+    id: 'creator_ig_test',
+    initialTemplateId: 'editorial-luxury',
+    initialUsername: 'criador_teste',
+    initialDisplayName: 'Criador Teste',
+    user: { id: 'usr_teste', email: 'criador@example.com', role: 'creator' },
+    profile: baseDefaults.profile,
+    design: baseDefaults.design,
+    links: baseDefaults.links,
+    gallery: baseDefaults.gallery,
+    posts: baseDefaults.posts,
+    letter: baseDefaults.letter,
+    products: baseDefaults.products,
+    analytics: {
+      totalViews: 10,
+      linkClicks: 2,
+      letterOpens: 1,
+      productViews: 0,
+      dailyStats: [],
+    },
+    isPublished: true,
+    publishedUrl: '/@criador_teste',
+    seo: baseDefaults.seo,
+  };
+
+  const generated = generateFallbackCreator(
+    'Produtor musical em São Paulo',
+    'lucas_beats',
+    'Lucas Beats'
+  );
+
+  const updated = applyGeneratedAndInstagramToAccount(baseAccount, generated, {
+    username: 'Lucas.Beats!',
+    profilePictureUrl: 'https://cdn.example.com/avatar.jpg',
+    connectedAt: '2026-11-12',
+    media: [
+      {
+        id: 'm1',
+        media_type: 'IMAGE',
+        media_url: 'https://cdn.example.com/photo1.jpg',
+        caption: 'Noite no estúdio gravando sintetizadores',
+        permalink: 'https://instagram.com/p/m1',
+        timestamp: '2026-11-10T12:00:00.000Z',
+      },
+      {
+        id: 'm2',
+        media_type: 'IMAGE',
+        media_url: 'https://cdn.example.com/photo2.jpg',
+        caption: 'Novo live set em Lisboa',
+        permalink: 'https://instagram.com/p/m2',
+        timestamp: '2026-11-11T12:00:00.000Z',
+      },
+    ],
+  });
+
+  assert.equal(updated.profile.username, 'lucas-beats');
+  assert.equal(updated.profile.instagramUsername, 'lucas.beats');
+  assert.equal(updated.profile.displayName, 'Lucas Beats');
+  assert.equal(updated.profile.avatarUrl, 'https://cdn.example.com/avatar.jpg');
+  assert.equal(updated.profile.coverUrl, 'https://cdn.example.com/photo2.jpg');
+  assert.equal(updated.gallery.length, 2);
+  assert.equal(updated.gallery[0].mediaUrl, 'https://cdn.example.com/photo1.jpg');
+  assert.equal(updated.gallery[0].title, 'Noite no estúdio gravando sintetizadores');
+  assert.equal(updated.posts[0].coverImage, 'https://cdn.example.com/photo1.jpg');
+  assert.equal(updated.letter.photoUrl, 'https://cdn.example.com/photo1.jpg');
+  assert.equal(updated.seo?.ogImage, 'https://cdn.example.com/avatar.jpg');
+  assert.equal(updated.publishedUrl, '/@lucas-beats');
+  assert.equal(updated.instagramIntegration?.connected, true);
+  assert.equal(updated.instagramIntegration?.handle, 'lucas.beats');
+});
+
+test('decodeHtmlEntities and parseInstagramOgProfile extract real profile metadata accurately', () => {
+  assert.equal(
+    decodeHtmlEntities('Prumo Creators | Parcerias e Influ&#xea;ncia (&#064;prumocreators) &amp; Co'),
+    'Prumo Creators | Parcerias e Influência (@prumocreators) & Co'
+  );
+
+  const sampleHtml = `
+    <html>
+      <head>
+        <meta property="og:title" content="Prumo Creators | Parcerias e Influ&#xea;ncia (&#064;prumocreators) &#x2022; Instagram photos and videos" />
+        <meta property="og:image" content="https://scontent.cdninstagram.com/v/avatar.jpg?oh=123&amp;oe=456" />
+        <meta property="og:description" content="119 Followers, 13 Following, 6 Posts - See Instagram photos and videos from Prumo Creators | Parcerias e Influ&#xea;ncia (&#064;prumocreators)" />
+        <meta name="description" content="119 Followers, 13 Following, 6 Posts - Prumo Creators on Instagram: &quot;Conectando marcas e criadores.&quot;" />
+      </head>
+    </html>
+  `;
+
+  const parsed = parseInstagramOgProfile(sampleHtml, '@PrumoCreators');
+  assert.equal(parsed.username, 'prumocreators');
+  assert.equal(parsed.displayName, 'Prumo Creators | Parcerias e Influência');
+  assert.equal(parsed.profilePictureUrl, 'https://scontent.cdninstagram.com/v/avatar.jpg?oh=123&oe=456');
+  assert.equal(parsed.followersText, '119 Followers, 13 Following, 6 Posts');
+  assert.equal(parsed.biography, 'Conectando marcas e criadores.');
+});
+
+

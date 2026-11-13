@@ -26,8 +26,56 @@ interface MediaKitViewProps {
   onUpdate: (updatedAccount: CreatorAccount) => void;
 }
 
+const createDefaultMediaKit = (account: CreatorAccount): MediaKitData => ({
+  tagline: 'Audiência qualificada. Resultado medido.',
+  headline: 'Parcerias com posicionamento editorial e conversão.',
+  quote: 'Marca não compra post. Compra confiança construída ao longo do tempo.',
+  summary: account.profile.bio,
+  totalFollowers: '100K+',
+  monthlyInteractions: '1.2M',
+  totalViews: '12M+',
+  platforms: [
+    {
+      platform: 'instagram',
+      handle: `@${account.profile.instagramUsername || account.profile.username}`,
+      followers: '80K',
+      totalViews: '850K',
+      storyViews: '12K / story',
+    },
+  ],
+  demographics: {
+    femalePercentage: 68,
+    malePercentage: 32,
+    capitalsPercentage: 64,
+    primaryAgeRange: '18–35 anos (72%)',
+    keyHighlights: ['Alta taxa de salvamento e compartilhamento', 'Público concentrado nas principais capitais'],
+  },
+  contentPillars: [
+    { title: 'Rotina & Bastidores', description: 'Conteúdo orgânico inserido no dia a dia com storytelling.' },
+    { title: 'Curadoria Autoral', description: 'Recomendações de produtos e experiências com foco em qualidade.' },
+  ],
+  categoriesFit: ['Lifestyle', 'Educação', 'Tecnologia', 'Bem-estar'],
+  packages: [
+    {
+      id: 'pkg_default_1',
+      type: 'avulso',
+      title: 'Combo Reels + Stories',
+      description: '1 Reels autoral + sequência de 4 Stories com link direto.',
+      price: 'Sob Consulta',
+      deliverables: ['Roteiro colaborativo', 'Relatório de métricas após 7 dias'],
+      popular: true,
+    },
+  ],
+  commercialContact: {
+    name: `Assessoria ${account.profile.displayName}`,
+    email: account.user.email,
+    whatsapp: '',
+    availabilityNotice: 'Agenda aberta para este mês',
+  },
+});
+
 export const MediaKitView: React.FC<MediaKitViewProps> = ({ account, onUpdate }) => {
-  const [mediaKit, setMediaKit] = useState<MediaKitData>(account.mediaKit);
+  const [mediaKit, setMediaKit] = useState<MediaKitData>(account.mediaKit || createDefaultMediaKit(account));
   const [activeTab, setActiveTab] = useState<'metrics' | 'demographics' | 'pillars' | 'packages' | 'contact'>('metrics');
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
